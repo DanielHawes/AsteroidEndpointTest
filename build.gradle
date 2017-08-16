@@ -1,0 +1,68 @@
+
+
+
+buildscript {    // Configuration for building
+  repositories {
+    mavenCentral()
+    jcenter()    // Bintray's repository - a fast Maven Central mirror & more
+  }
+  dependencies {
+    classpath 'com.google.cloud.tools:appengine-gradle-plugin:+'
+    classpath 'com.google.cloud.tools:endpoints-framework-gradle-plugin:+'
+  }
+}
+
+repositories {   // repositories for Jar's you access in your code
+  mavenCentral()
+  jcenter()
+}
+
+apply plugin: 'java'                              // standard Java tasks
+apply plugin: 'war'                               // standard Web Archive plugin
+apply plugin: 'com.google.cloud.tools.appengine'  // App Engine tasks
+apply plugin: 'com.google.cloud.tools.endpoints-framework-server'
+
+dependencies {
+  providedCompile group: 'javax.servlet', name: 'servlet-api', version:'2.5'
+  compile 'jstl:jstl:1.2'
+  // compile group: 'com.google.guava', name: 'guava', version: '20.0'
+  compile group: 'javax.inject', name: 'javax.inject', version: '1'
+  compile 'com.google.apis:google-api-services-compute:v1-rev154-1.22.0'
+  compile group: 'com.google.appengine', name: 'appengine-api-1.0-sdk', version: '+'
+  compile group: 'com.google.cloud', name: 'google-cloud-spanner', version: '0.20.1-beta'
+  compile group: 'io.netty', name: 'netty-tcnative-boringssl-static', version: '1.1.33.Fork26' 
+
+  // Uncomment to use Endpoints Frameworks v1.0 and comment the v2.0 section
+  // compile group: 'com.google.appengine', name: 'appengine-endpoints', version: '+'
+  // End of Endpoints Frameworks v1.0
+
+  // Endpoints Frameworks v2.0
+  compile group: 'com.google.endpoints', name: 'endpoints-framework', version: '+'
+  // End of Endpoints Frameworks v2.0
+  
+  compile 'com.google.apis:google-api-services-sqladmin:v1beta4-rev45-1.22.0'
+
+}
+
+appengine {  // App Engine tasks configuration
+  run {      // local (dev_appserver) configuration (standard environments only)
+
+  }
+
+  deploy {   // deploy configuration
+
+  }
+}
+
+
+
+endpointsServer {
+  // Endpoints Framework Plugin server-side configuration
+  hostname = "better-world-175517.appspot.com"
+}
+
+group   = 'com.example.b612' // Generated output GroupId
+version = '2'          // Version in generated output
+
+sourceCompatibility = 1.7     // App Engine Standard uses Java 7
+targetCompatibility = 1.7     // App Engine Standard uses Java 7

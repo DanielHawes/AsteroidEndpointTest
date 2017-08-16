@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hello Endpoints!</title>
+    <script type="text/javascript" src="/js/base.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="/bootstrap/css/bootstrap.css">
+    <link type="text/css" rel="stylesheet" href="/bootstrap/css/bootstrap-responsive.css">
+    <link type="text/css" rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="container">
+
+	<form action="javascript:void(0);">
+        <h2>Add Asteroid</h2>
+        <div><span class="label">Name: </span><input id="asteroidName" /></div>
+        <div><span class="label">Diameter: </span><input id="asteroidDiam" /></div>
+        <div>Dimensions:</div>
+        <div><span class="dimlabel">Length: </span><input id="asteroidLength" /></div>
+        <div><span class="dimlabel">Width: </span><input id="asteroidWidth" /></div>
+        <div><span class="dimlabel">Height: </span><input id="asteroidHeight" /></div>
+        <div><span class="label">Mean Distance From Sun: </span><input id="asteroidDist" /></div>
+        <div><input id="addAsteroid" type="submit" class="btn btn-small" value="Submit"></div>
+    </form>
+
+    <form action="javascript:void(0);">
+        <h2>Refresh Asteroids</h2>
+        <div><input id="listAsteroids" type="submit" class="btn btn-small" value="Refresh"></div>
+    </form>
+    
+    <table id="AsteroidTable">
+	 	<tr>
+	 		<th>Asteroid</th>
+	 		<th>Diameter</th>
+	 		<th>Dimensions</th>
+	 		<th>Mean Distance From Sun</th>
+	 	</tr>
+	 </table>
+
+    <script type="text/javascript">
+        function init() {
+            google.devrel.samples.hello.init('//' + window.location.host + '/_ah/api');
+        }
+    </script>
+    <script src="https://apis.google.com/js/client.js?onload=init"></script>
+</div>
+</body>
+</html>
+
+<!-- <div id="outputLog"></div>
+
+    <form action="javascript:void(0);">
+        <h2>Get Greeting</h2>
+        <div><span class="label">Greeting ID: </span><input id="id" /></div>
+        <div><input id="getGreeting" type="submit" class="btn btn-small" value="Submit"></div>
+    </form> 
+    
+    <form action="javascript:void(0);">
+        <h2>List Greetings</h2>
+        <div><input id="listGreeting" type="submit" class="btn btn-small" value="Submit"></div>
+    </form>
+    
+    <form action="javascript:void(0);">
+        <h2>Multiply Greetings</h2>
+        <div><span class="label">Greeting: </span><input id="greeting" /></div>
+        <div><span class="label">Count: </span><input id="count" /></div>
+        <div><input id="multiplyGreetings" type="submit" class="btn btn-small" value="Submit"></div>
+    </form>
+    
+    <form action="javascript:void(0);">
+        <h2>Authenticated Greeting</h2>
+        <div><input id="authedGreeting" type="submit" class="btn btn-small" disabled value="Submit"></div>
+    </form>
+    
+    <table id="AsteroidTable">
+	 	<tr>
+	 		<th>Asteroid</th>
+	 		<th>Diameter</th>
+	 		<th>Dimensions</th>
+	 		<th>Mean Distance From Sun</th>
+	 	</tr>
+	 </table>
+
+    <script type="text/javascript">
+        function init() {
+            google.devrel.samples.hello.init('//' + window.location.host + '/_ah/api');
+        }
+    </script>
+    <script src="https://apis.google.com/js/client.js?onload=init"></script>
+</div> -->
