@@ -50,6 +50,7 @@ google.devrel.samples.hello.userAuthed = function() {
       document.getElementById('authedGreeting').disabled = false;
     }
   });
+  
 };
 
 /**
@@ -206,10 +207,13 @@ google.devrel.samples.hello.init = function(apiRoot) {
       google.devrel.samples.hello.enableButtons();
       google.devrel.samples.hello.signin(true,
           google.devrel.samples.hello.userAuthed);
+      google.devrel.samples.hello.listAsteroids();
     }
   }
 
   apisToLoad = 2; // must match number of calls to gapi.client.load()
   gapi.client.load('helloworld', 'v1', callback, apiRoot);
   gapi.client.load('oauth2', 'v2', callback);
+  
+  
 };

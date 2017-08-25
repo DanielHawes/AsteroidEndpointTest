@@ -26,12 +26,15 @@ import com.google.api.services.compute.model.Operation;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 
 import javax.inject.Named;
+import javax.servlet.ServletException;
 
+/*Initiate the API for this class*/
 @Api(
 	    name = "helloworld",
 	    version = "v1",
@@ -41,53 +44,48 @@ import javax.inject.Named;
 	    audiences = {Constants.ANDROID_AUDIENCE}
 	)
 
+/**
+ * Class for the management of the list of asteroids
+ * 
+ * @author Daniel Hawes
+ *
+ */
 public class AsteroidList
 {
-	public static ArrayList<Asteroid> asteroidList = new ArrayList<Asteroid>();
+	DatabaseControl db = new DatabaseControl();
 	
-	
-	static
-	{
-		double[] ceresDim = {965, 962, 891};
-		asteroidList.add(new Asteroid("Ceres", 946, ceresDim, 2.766));
-		SpannerTools tools = new SpannerTools();
-		tools.addAsteroid(new Asteroid("Ceres", 946, ceresDim, 2.766));
-		
-		double[] vestaDim = {572.6, 557.2, 446.4};
-		asteroidList.add(new Asteroid("Vesta", 525.4, vestaDim, 2.362));
-		
-		double[] pallasDim = {550, 516, 476};
-		asteroidList.add(new Asteroid("Pallas", 512, pallasDim, 2.773));
-		
-		double[] hygieaDim = {530, 407, 370};
-		asteroidList.add(new Asteroid("Hygiea", 431, hygieaDim, 3.139));
-	}
-	
-	public Asteroid getAsteroid(@Named("name") String name) throws NotFoundException
-	{
-		for(int i=0; i < asteroidList.size(); i++)
-		{
-			if(asteroidList.get(i).getName().equals(name))
-			{
-				return asteroidList.get(i);
-			}
-		}
-		throw new NotFoundException("Asteroid '" + name + "' is not in the system yet");
-	}
-	
+	/**
+	 * Insert a new Asteroid using the API
+	 * 
+	 * @param asteroidName asteroid name
+	 * @param diameter diameter of asteroid
+	 * @param dimensionL length of asteroid
+	 * @param dimensionW width of asteroid
+	 * @param dimensionH height of asteroid
+	 * @param meanDFromSun mean distance from the sun
+	 * @return
+	 */
 	@ApiMethod(name = "asteroidList.addAsteroid", httpMethod = "post")
 	public Asteroid insertAsteroid(@Named("asteroidName") String asteroidName, @Named("diameter") double diameter, 
 							@Named("dimensionL") double dimensionL, @Named("dimensionW") double dimensionW,
 							@Named("dimensionH") double dimensionH, @Named("meanDFromSun") double meanDFromSun)
 	{
-		double[] newDim = {dimensionL, dimensionW, dimensionH};
-		Asteroid response = new Asteroid(asteroidName, diameter, newDim, meanDFromSun);
-		asteroidList.add(response);
+		//Create a response of the new Asteroid to return
+		Asteroid response = new Asteroid(asteroidName, diameter, dimensionL, dimensionW, dimensionH, meanDFromSun);
+
+		//Try to add this asteroid to the database
+		try {
+			db.addAsteroidToDatabase(response);
+		} catch (ServletException e) {
+			e.printStackTrace();
+		}
 		
+		//Information for connecting to the Compute Engine
 		String projectID = "better-world-175517";
 		String zone = "us-east1-c";
 		String instance = "computeasteroid";
-			
+	
+		//Attempt to connect to the Compute Engine
 		Compute computeService;
 		try {
 			computeService = createComputeService();
@@ -104,6 +102,28 @@ public class AsteroidList
 		return response;
 	}
 	
+	/**
+	 * Method to multiply together the dimensions of an asteroid
+	 * 
+	 * @param id autoincremented ID of the reqeust
+	 * @param request The request of the compute engine
+	 * @param status status of the request
+	 */
+	@ApiMethod(name = "asteroidList.multiplyAsteroid", httpMethod = "post")
+	public void multiplyAsteroid(@Named("id") String id, @Named("request") String request, @Named("status") String status)
+	{
+		//Asteroid asteroid = 
+
+	}
+	
+	/**
+	 * Set up the Compute Engine service
+	 * 
+	 * @return Compute.Builder
+	 * 
+	 * @throws IOException
+	 * @throws GeneralSecurityException
+	 */
 	public static Compute createComputeService() throws IOException, GeneralSecurityException {
 	    HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
 	    JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
@@ -119,9 +139,22 @@ public class AsteroidList
 	        .build();
 	  }
 	
-	public ArrayList<Asteroid> listAsteroids()
+	/**
+	 * Returns the list of asteroids to iterate over
+	 * 
+	 * @return list of asteroids
+	 * @throws ServletException
+	 */
+	public ArrayList<Asteroid> listAsteroids() throws ServletException
 	{
-		return asteroidList;
+		try
+		{
+			return db.getAsteroidsFromDatabase();
+		} catch (ServletException e)
+		{
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }

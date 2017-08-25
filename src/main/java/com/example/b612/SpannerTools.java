@@ -9,7 +9,9 @@ import com.google.cloud.spanner.DatabaseClient;
 import com.google.cloud.spanner.DatabaseId;
 import com.google.cloud.spanner.Spanner;
 import com.google.cloud.spanner.SpannerOptions;
+import com.google.cloud.spanner.Statement;
 import com.google.cloud.spanner.Mutation;
+import com.google.cloud.spanner.ResultSet;
 
 
 public class SpannerTools
@@ -30,15 +32,15 @@ public class SpannerTools
 	
 	public void addAsteroid(Asteroid newAsteroid)
 	{
-		//spanner = options.getService();
+		spanner = options.getService();
 		try
 		{
-			//db = DatabaseId.of(options.getProjectId(), INSTANCE_ID, DATABASE_ID);
+			db = DatabaseId.of(options.getProjectId(), INSTANCE_ID, DATABASE_ID);
 			//System.out.println(db);
-			//dbClient = spanner.getDatabaseClient(db);
-			//dbAdminClient = spanner.getDatabaseAdminClient();
+			dbClient = spanner.getDatabaseClient(db);
+			dbAdminClient = spanner.getDatabaseAdminClient();
 						
-			List<Mutation> mutations = new ArrayList<>();
+			/*List<Mutation> mutations = new ArrayList<>();
 			mutations.add(
 					Mutation.newInsertBuilder("Asteroids")
 						.set("Name")
@@ -55,14 +57,21 @@ public class SpannerTools
 						.to(newAsteroid.getMeanDFromSun())
 						.build());
 			
-			//dbClient.write(mutations);
+			dbClient.write(mutations);*/
+			
+			ResultSet resultSet = dbClient.singleUse().executeQuery(Statement.of("SELECT 1"));
+			System.out.println("\n\nResults:");
+		      // Prints the results
+		      while (resultSet.next()) {
+		        System.out.printf("%d\n\n", resultSet.getLong(0));
+		      }
 		}
 		catch (Exception e)
 		{
 			System.out.println("SPANNER UNABLE TO WRITE");
 		} finally
 		{
-			//spanner.close();
+			spanner.close();
 		}
 	}
 }

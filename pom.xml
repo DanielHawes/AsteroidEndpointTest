@@ -9,9 +9,18 @@
     <artifactId>AsteroidEndpointTest</artifactId>
 
     <properties>
-        <maven.compiler.source>1.7</maven.compiler.source>
-        <maven.compiler.target>1.7</maven.compiler.target>
-        <!-- <guava.version>19.0</guava.version> -->
+		<!-- INSTANCE_CONNECTION_NAME from Cloud Console > SQL > Instance Details > Properties
+		     or gcloud sql instances describe <instance>
+		     project:region:instance for Cloud SQL 2nd Generation or
+		     project:instance        for Cloud SQL 1st Generation
+		-->
+        <INSTANCE_CONNECTION_NAME>better-world-175517:us-east1:asteroids</INSTANCE_CONNECTION_NAME>
+    	<user>root</user>
+    	<password>password</password>
+    	<database>Asteroids_db</database>
+    
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     
@@ -51,13 +60,8 @@
     	<dependency>
 	      	<groupId>com.google.cloud</groupId>
 	      	<artifactId>google-cloud-spanner</artifactId>
-	      	<version>0.21.1-beta</version>
-	      	<exclusions>
-	        	<exclusion> <!-- exclude an old version of Guava -->
-	          		<groupId>com.google.guava</groupId>
-	          		<artifactId>guava-jdk5</artifactId>
-	        	</exclusion>
-	      	</exclusions>
+	      	<version>0.20.1-beta</version>
+	      	
 	    </dependency>
 	    <dependency>
       		<groupId>com.google.guava</groupId>
@@ -65,15 +69,21 @@
       		<version>20.0</version>
     	</dependency>
     	<dependency>
-  			<groupId>com.google.cloud</groupId>
-  			<artifactId>google-cloud</artifactId>
-  			<version>0.21.1-alpha</version>
-		</dependency> 
-    	<dependency>
       		<groupId>com.google.apis</groupId>
       		<artifactId>google-api-services-compute</artifactId>
       		<version>v1-rev154-1.22.0</version>
     	</dependency>
+    	
+    	<dependency> <!-- Only used locally -->
+  			<groupId>mysql</groupId>
+  			<artifactId>mysql-connector-java</artifactId>
+  			<version>5.1.42</version>  <!-- v5.x.x is for production, v6.x.x EAP X DevAPI -->
+		</dependency>
+		<dependency>
+  			<groupId>com.google.cloud.sql</groupId>
+  			<artifactId>mysql-socket-factory</artifactId> <!-- mysql-socket-factory-connector-j-6 if using 6.x.x -->
+  			<version>1.0.3</version>
+		</dependency>
 <dependency>
 <groupId>com.google.api-client</groupId>
 <artifactId>google-api-client</artifactId>
